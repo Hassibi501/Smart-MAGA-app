@@ -1,0 +1,5 @@
+name = "smart-maga-app"          # can be any slug
+main = "src/worker.ts"           # entry file for Worker
+compatibility_date = "2025-05-04"
+
+# later we’ll store secrets (API keys) with wrangler secret put

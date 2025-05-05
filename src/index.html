@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Smart MAGA App – WaveScan</title>
+  <style>
+    body{font-family:system-ui,Arial;padding:2rem;text-align:center}
+    button{padding:.6rem 1.2rem;font-size:1.1rem;cursor:pointer}
+    #out{margin-top:1.5rem;font-size:1.2rem;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <h1>🛰 Smart MAGA WaveScan</h1>
+  <button id="scan">Scan Local 5 G Waves</button>
+  <div id="out"></div>
+
+  <script>
+    async function scan(paranoia=1){
+      document.getElementById('out').textContent = 'Locating…'
+      navigator.geolocation.getCurrentPosition(async pos=>{
+        const res = await fetch('/scan', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            paranoia
+          })
+        })
+        const data = await res.json()
+        document.getElementById('out').textContent =
+          `Intensity ${data.intensity}\n${data.report}`
+      }, err=>{
+        document.getElementById('out').textContent = 'Location denied.'
+      })
+    }
+    document.getElementById('scan').onclick = ()=>scan(1)
+  </script>
+</body>
+</html>
